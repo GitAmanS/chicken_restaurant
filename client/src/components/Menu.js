@@ -30,7 +30,7 @@ const Menu = () => {
     <>
       <div className="menu-container w-full h-full md:h-full overflow-y-auto" style={{ height: '450px', scrollbarWidth: 'thin', scrollbarColor: 'transparent transparent' }}>
         <div className="menu-content flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-4 mx-4 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 p-4 mx-auto ">
             {currentItems.map((item) => (
               <div key={item.id} className="card-container bg-white bg-opacity-10 flex flex-col items-center p-2 text-center rounded-lg backdrop-blur-md md:w-60 h-54 ">
                 <img

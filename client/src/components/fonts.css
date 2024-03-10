@@ -140,7 +140,7 @@
   }
 
   .custom-border {
-    border: 50px solid black; /* Adjust color as needed */
+    border: 30px solid black; /* Adjust color as needed */
     border-bottom:0px;
     @media (max-width: 768px) {
       border-width: 10px; /* Adjust the smaller border width as needed */
