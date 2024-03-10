@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-
+import {useUser} from '../context/UserContext'
 const Menu = () => {
   // Sample data for the grid
   const data = Array.from({ length: 20 }, (_, i) => ({
     id: i + 1,
     title: `Fried Drum Sticks (2pcs) ${i + 1}`,
     image: `chicken2.png`, // Replace with your image source
+    price: 400
   }));
 
   // Set items per page
@@ -21,10 +22,15 @@ const Menu = () => {
   // Slice the data array to get items for the current page
   const currentItems = data.slice(startIndex, endIndex);
 
+  const { addToCart, removeFromCart, cart } = useUser();
   // Function to handle page changes
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const handleCart = (item)=>{
+    addToCart(item);
+  }
 
   return (
     <>
@@ -39,7 +45,7 @@ const Menu = () => {
                   className="mb-2 w-full h-32 object-cover rounded-t-md"
                 />
                 <h3 className="text-lg font-bold mb-2">{item.title}</h3>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+                <button onClick={()=>{handleCart(item)}} className="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
               </div>
             ))}
           </div>

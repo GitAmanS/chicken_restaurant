@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineShopping } from 'react-icons/ai';
 import { FaRegHeart } from 'react-icons/fa';
 import './fonts.css';
 import { GrBladesVertical } from "react-icons/gr";
 import { GrBladesHorizontal } from "react-icons/gr";
 import { useSpring, animated } from 'react-spring';
+import {useUser} from '../context/UserContext'
+import { FaSignOutAlt } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
+import { Link } from "react-router-dom";
 const Header = () => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
 
+  const [isMenuOpen, setMenuOpen] = useState(false);
   const [isCartOpen, setCartOpen] = useState(false);
+  const { userData, logoutUser, addToCart, removeFromCart, cart } = useUser();
+
+
 
   const toggleCart = () => {
     setCartOpen(!isCartOpen);
@@ -18,15 +25,12 @@ const Header = () => {
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
+
   const cartAnimation = useSpring({
     transform: isCartOpen ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isCartOpen ? 1 : 0,
   });
 
-  const menuAnimation = useSpring({
-    transform: isMenuOpen ? 'translateY(0%)' : 'translateY(100%)',
-    opacity: isMenuOpen ? 1 : 0,
-  });
 
   return (
     <nav className="p-4 md:p-4">
@@ -48,69 +52,76 @@ const Header = () => {
         {isMenuOpen && (
           
             <div className="md:hidden absolute z-10 flex flex-col space-y-2 mt-28">
-            <a
-              href="/"
+            <Link 
+              to="/"
               className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Home
-            </a>
-            <a
-              href="/menu"
+            </Link>
+            <Link 
+              to="/menu"
               className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Menu
-            </a>
-            <a
-              href="/orders"
+            </Link>
+            <Link 
+              to="/orders"
               className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Orders
-            </a>
-            <a
-              href="/services"
+            </Link>
+            <Link 
+              to="/services"
               className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Services
-            </a>
+            </Link>
             </div>
         )}
         {/* Desktop menu */}
         <div className="hidden md:flex flex-col md:flex-row  md:space-x-2 md:items-center justify-center">
-          <a
-            href="/"
+          <Link 
+            to="/"
             className="bg-white bg-opacity-10 text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg"
           >
             Home
-          </a>
-          <a
-            href="/menu"
+          </Link>
+          <Link 
+            to="/menu"
             className="bg-opacity-10 text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg"
           >
             Menu
-          </a>
-          <a
-            href="/orders"
+          </Link>
+          <Link 
+            to="/orders"
             className="bg-opacity-10 text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg"
           >
             Orders
-          </a>
-          <a
-            href="/services"
+          </Link>
+          <Link 
+            to="/services"
             className="bg-opacity-10 text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg"
           >
             Services
-          </a>
+          </Link>
           
         </div>
-        <div className="flex flex-row mt-1 md:mt-0 md:ml-4 gap-2">
+        {userData?        <div className="flex flex-row mt-1 md:mt-0 md:ml-4 gap-2">
+        <div className="relative">
           <div
             className="flex items-center justify-center p-2 rounded-full border-2 border-white text-2xl text-white cursor-pointer"
             onClick={toggleCart}
           >
             <AiOutlineShopping />
           </div>
-          <div className="flex items-center justify-center p-2 rounded-full border-2 bg-white text-2xl text-black ">
-            <FaRegHeart />
+          {cart.length > 0 && (
+            <div className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 py-0 text-xs">
+              {cart.length}
+            </div>
+          )}
+        </div>
+          <div onClick={logoutUser} className="flex items-center justify-center p-2 rounded-full border-2 bg-white text-2xl text-black ">
+            <IoIosLogOut />
           </div>
 
           {/* Cart Slider */}
@@ -125,17 +136,30 @@ const Header = () => {
             </div>
             
             {/* Sample cart items */}
-            <div className="flex items-center space-x-2">
-              <img
-                src="product.jpg"
-                alt="Product"
-                className="w-12 h-12 object-cover rounded-md"
-              />
-              <div>
-                <p>Product Name</p>
-                <p>$19.99</p>
+            {!cart?<div>No Item Inside cart</div>:(cart.map((item)=>{
+              return <div className="flex flex-row w-full items-center ">
+                
+                  <img
+                    src={item.image}
+                    alt="Product"
+                    className="w-12 h-12 object-cover rounded-md"
+                />
+                <p className='flex top-0 right- mb-auto mr-auto bg-black py-0 p-1 rounded-full bg-opacity-30 backdrop-blur-md text-white'>{item.quantity}</p>
+
+
+                
+                <div>
+                  <p>{item.title}</p>
+                  <p>${item.price}</p>
+                  
+                </div>
+
+                <button className='flex ml-auto text-red-600' onClick={()=>{removeFromCart(item)}}>
+                  X
+                </button>
               </div>
-            </div>
+            }))}
+
             {/* Additional cart items can be added here */}
             <button
               className=" bg-green-500 text-white px-6 py-2 rounded-md mt-auto"
@@ -144,7 +168,13 @@ const Header = () => {
               Proceed to Checkout
             </button>
           </animated.div>
-        </div>
+        </div>:
+        <div className='flex flex-row mt-1 md:mt-0 md:ml-4 gap-2'>
+          <Link to="/auth"  className="flex items-center justify-center p-2 rounded-full border-2 bg-white text-3xl text-black ">
+            <FaSignOutAlt />
+          </Link>
+
+        </div>}
       </div>
     </nav>
   );

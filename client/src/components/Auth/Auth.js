@@ -1,27 +1,48 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
+import {useUser} from '../../context/UserContext'
 const Auth = () => {
-  const [activeTab, setActiveTab] = useState('login');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoginSuccess, setLoginSuccess] = useState(false);
+    const [activeTab, setActiveTab] = useState('login');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [isLoginSuccess, setLoginSuccess] = useState(false);
 
-  const handleLogin = () => {
-    // Implement your login logic here
-    // For simplicity, we'll just set a dummy success state
-    setLoginSuccess(true);
-  };
-
-  const handleSignup = () => {
-    // Implement your signup logic here
-    // For simplicity, we'll just set a dummy success state
-    setLoginSuccess(true);
-  };
-
-  const switchTab = (tab) => {
-    setActiveTab(tab);
-  };
-
+    const { userData, loginUser, logoutUser } = useUser();
+    const handleLogin = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/signin', {
+          username,
+          password,
+        });
+  
+        setLoginSuccess(true);
+        loginUser(response.data);
+        console.log(userData); // Handle the response data accordingly
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
+    };
+  
+    const handleSignup = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/signup', {
+          username,
+          email,
+          password,
+        });
+  
+        setLoginSuccess(true);
+        
+      } catch (error) {
+        console.error('Error during signup:', error);
+      }
+    };
+  
+    const switchTab = (tab) => {
+      setActiveTab(tab);
+    };
+  
   return (
     <div className="flex flex-col items-center justify-center p-6">
       <div className="bg-white bg-opacity-10 rounded-lg backdrop-blur-md p-8 rounded shadow-md w-full md:w-96">
@@ -87,6 +108,15 @@ const Auth = () => {
           <div>
             <h2 className="text-2xl font-bold mb-4 text-white">Signup</h2>
             <form className="text-white">
+              <div className="mb-4">
+                <label className="block mb-2">Email:</label>
+                <input
+                  className="border rounded w-full py-2 px-3 bg-gray-800 focus:outline-none"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
               <div className="mb-4">
                 <label className="block mb-2">Username:</label>
                 <input
