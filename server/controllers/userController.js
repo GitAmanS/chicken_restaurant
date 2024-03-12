@@ -13,7 +13,7 @@ const signup = async (req, res) => {
     }
 
     // Create a new user instance
-    const newUser = new User({ username, email, password });
+    const newUser = new User({ username, email, password, role:"admin" });
 
     // Save the user to the database
     await newUser.save();
@@ -46,10 +46,12 @@ const signin = async (req, res) => {
     }
 
     // Generate a JSON Web Token (JWT) for the authenticated user
-    const token = generateToken(user);
+    const token = await generateToken(user);
 
     // Set the token in a cookie
+
     res.cookie('token', token, { httpOnly: true });
+
 
     // Respond with the user information (without exposing the token in the response body)
     res.status(200).json({ user });
@@ -61,7 +63,7 @@ const signin = async (req, res) => {
 
 // Helper function to generate a JSON Web Token (JWT)
 const generateToken = (user) => {
-  const secretKey = 'yourSecretKey'; // Replace with your secret key
+  const secretKey = 'SecretKey'; // Replace with your secret key
   const expiresIn = '24h'; // Token expiration time (e.g., 1 hour)
 
   // Generate the token

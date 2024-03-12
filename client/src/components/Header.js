@@ -13,7 +13,7 @@ const Header = () => {
 
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isCartOpen, setCartOpen] = useState(false);
-  const { userData, logoutUser, addToCart, removeFromCart, cart } = useUser();
+  const { userData, logoutUser, addToCart, removeFromCart, cart, cartTotal } = useUser();
 
 
 
@@ -137,7 +137,7 @@ const Header = () => {
             
             {/* Sample cart items */}
             {!cart?<div>No Item Inside cart</div>:(cart.map((item)=>{
-              return <div className="flex flex-row w-full items-center ">
+              return <div key={item._id} className="flex flex-row w-full items-center ">
                 
                   <img
                     src={item.image}
@@ -161,12 +161,18 @@ const Header = () => {
             }))}
 
             {/* Additional cart items can be added here */}
-            <button
-              className=" bg-green-500 text-white px-6 py-2 rounded-md mt-auto"
-              onClick={toggleCart}
-            >
-              Proceed to Checkout
-            </button>
+            <div className='flex flex-col mt-auto '>
+              <h1 className='text-xl mb-3'>
+                Total: ${cartTotal}
+              </h1>
+              <button
+                className=" bg-green-500 text-white px-6 py-2 rounded-md "
+                onClick={toggleCart}
+              >
+                Proceed to Checkout
+              </button>
+            </div>
+
           </animated.div>
         </div>:
         <div className='flex flex-row mt-1 md:mt-0 md:ml-4 gap-2'>

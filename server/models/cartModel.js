@@ -8,7 +8,7 @@ const cartSchema = new mongoose.Schema({
       quantity: { type: Number, default: 1 },
     },
   ],
-  // Add other fields as needed
+  total: { type: Number, default: 0 }, // New field for total
 
   // Timestamps
   createdAt: { type: Date, default: Date.now },
@@ -27,8 +27,19 @@ cartSchema.methods.addItemToCart = function (itemId, quantity = 1) {
     this.items.push({ item: itemId, quantity });
   }
 
+  // Recalculate the total after adding the item
+  this.total = this.items.reduce((sum, cartItem) => sum + cartItem.quantity, 0);
+
   return this.save();
 };
+
+cartSchema.methods.cartTotal = function() {
+  return this.items.reduce((sum, cartItem) => {
+    const { price } = cartItem.item;
+    return sum + price * cartItem.quantity;
+  }, 0);
+}
+
 
 const Cart = mongoose.model('Cart', cartSchema);
 
