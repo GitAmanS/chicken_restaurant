@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 const itemRoutes = require('./routes/itemRoutes')
 const cartRoutes = require('./routes/cartRoutes')
+const orderRoutes = require('./routes/orderRoutes')
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://amanshaikh8624:77xaAxqCozNZq1H8@cluster0.82wj9wt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
@@ -32,6 +34,7 @@ db.once('open', () => {
 app.use(bodyParser.json());
 app.use('/api', itemRoutes);
 app.use('/api', cartRoutes);
+app.use('/api', orderRoutes);
 // Routes for user registration and authentication
 app.post('/signup', userController.signup);
 app.post('/signin', userController.signin);

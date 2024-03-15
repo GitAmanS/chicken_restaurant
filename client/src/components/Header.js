@@ -9,13 +9,14 @@ import {useUser} from '../context/UserContext'
 import { FaSignOutAlt } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
+import axios from 'axios';
 const Header = () => {
 
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isCartOpen, setCartOpen] = useState(false);
   const { userData, logoutUser, addToCart, removeFromCart, cart, cartTotal } = useUser();
 
-
+  
 
   const toggleCart = () => {
     setCartOpen(!isCartOpen);
@@ -30,6 +31,48 @@ const Header = () => {
     transform: isCartOpen ? 'translateX(0%)' : 'translateX(100%)',
     opacity: isCartOpen ? 1 : 0,
   });
+
+
+	const initPayment = (data) => {
+    console.log(data.amount)
+		const options = {
+			key: "rzp_test_wud5i0vu3P18BR",
+			amount: data.amount,
+			currency: data.currency,
+			name: "test name",
+			description: "Test Transaction",
+			order_id: data.id,
+			handler: async (response) => {
+				try {
+          console.log("response", response)
+					const  data  = await axios.post("http://localhost:5000/api/paymentverification", {response}, {
+            withCredentials: true,
+          });
+					console.log(data);
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			theme: {
+				color: "#3399cc",
+			},
+		};
+		const rzp1 = new window.Razorpay(options);
+		rzp1.open();
+	};
+  
+  const handleCheckout = async ()=>{
+    try{
+      const response = await axios.get('http://localhost:5000/api/checkout', {
+        withCredentials: true,
+      });
+      console.log(response.data.order)
+      initPayment(response.data.order);
+
+    }catch(error){
+      console.log(error)
+    }
+  }
 
 
   return (
@@ -167,7 +210,7 @@ const Header = () => {
               </h1>
               <button
                 className=" bg-green-500 text-white px-6 py-2 rounded-md "
-                onClick={toggleCart}
+                onClick={handleCheckout}
               >
                 Proceed to Checkout
               </button>

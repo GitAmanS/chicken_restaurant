@@ -16,7 +16,7 @@ const cartSchema = new mongoose.Schema({
 });
 
 // Method to add an item to the cart
-cartSchema.methods.addItemToCart = function (itemId, quantity = 1) {
+cartSchema.methods.addItemToCart = function (itemId, quantity = 1, title) {
   const existingItem = this.items.find((cartItem) => cartItem.item.equals(itemId));
 
   if (existingItem) {
@@ -24,7 +24,7 @@ cartSchema.methods.addItemToCart = function (itemId, quantity = 1) {
     existingItem.quantity += quantity;
   } else {
     // Otherwise, add a new item to the cart
-    this.items.push({ item: itemId, quantity });
+    this.items.push({ item: itemId, quantity, title });
   }
 
   // Recalculate the total after adding the item
