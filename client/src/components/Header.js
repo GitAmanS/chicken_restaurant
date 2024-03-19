@@ -97,25 +97,25 @@ const Header = () => {
             <div className="md:hidden absolute z-10 flex flex-col space-y-2 mt-28">
             <Link 
               to="/"
-              className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
+              className="text-white py-3 px-6 rounded-full bg-amber-500 bg-opacity-10 backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Home
             </Link>
             <Link 
               to="/menu"
-              className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
+              className="text-white py-3 px-6 rounded-full bg-amber-500 bg-opacity-10 backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Menu
             </Link>
             <Link 
               to="/orders"
-              className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
+              className="text-white py-3 px-6 rounded-full bg-amber-500 bg-opacity-10 backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Orders
             </Link>
             <Link 
               to="/services"
-              className="text-white py-3 px-6 rounded-full backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
+              className="text-white py-3 px-6 rounded-full bg-amber-500 bg-opacity-10 backdrop-blur-3xl poppins-regular text-lg flex items-center justify-center"
             >
               Services
             </Link>
@@ -169,7 +169,7 @@ const Header = () => {
 
           {/* Cart Slider */}
           <animated.div
-            className="flex flex-col fixed top-0 right-0 h-screen w-1/4 bg-white p-4 z-10"
+            className="flex flex-col fixed top-0 right-0 h-screen w-3/4 md:w-1/4 bg-white p-4 z-10"
             style={cartAnimation}
           >
             {/* Cart content goes here */}
@@ -206,7 +206,7 @@ const Header = () => {
             {/* Additional cart items can be added here */}
             <div className='flex flex-col mt-auto '>
               <h1 className='text-xl mb-3'>
-                Total: ${cartTotal}
+                Total: ${cartTotal.toFixed(2)}
               </h1>
               <button
                 className=" bg-green-500 text-white px-6 py-2 rounded-md "

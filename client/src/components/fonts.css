@@ -146,4 +146,19 @@
       border-width: 10px; /* Adjust the smaller border width as needed */
     }
   }
+
+  .text-stroke {
+    -webkit-text-stroke: 2px white; /* Webkit (Safari/Chrome) browsers */
+    text-stroke: 2px white; /* Non-Webkit browsers */
+    color: transparent; /* Hide original text color */
+  }
+
+  .blurred-border {
+    color: white; /* Border color */
+    text-shadow: 
+      -1px -1px 1px rgba(255, 255, 255, 0.5), /* Top-left blur */
+      1px -1px 1px rgba(255, 255, 255, 0.5), /* Top-right blur */
+      -1px 1px 1px rgba(255, 255, 255, 0.5), /* Bottom-left blur */
+      1px 1px 1px rgba(255, 255, 255, 0.5); /* Bottom-right blur */
+  }
   

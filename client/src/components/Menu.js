@@ -36,23 +36,31 @@ const Menu = () => {
 
   return (
     <>
-      <div className="menu-container w-full h-full md:h-full overflow-y-auto" style={{ height: '450px', scrollbarWidth: 'thin', scrollbarColor: 'transparent transparent' }}>
-        <div className="menu-content flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 p-4 mx-auto ">
-            {currentItems.map((item) => (
-              <div key={item._id} className="card-container bg-white bg-opacity-10 flex flex-col items-center p-2 text-center rounded-lg backdrop-blur-md md:w-60 h-54 ">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="mb-2 w-full h-32 object-cover rounded-t-md"
-                />
-                <h3 className="text-lg font-bold mb-2">{item.title}</h3>
-                <button onClick={() => { handleCart(item) }} className="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
-              </div>
-            ))}
+<div className="menu-container w-full h-full md:h-full overflow-y-auto" style={{ height: '450px', scrollbarWidth: 'thin', scrollbarColor: 'transparent transparent' }}>
+  <div className="menu-content flex justify-center">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 p-4 mx-auto ">
+      {currentItems.map((item) => (
+        <div key={item._id} className="relative">
+          <div className="card-container bg-white bg-opacity-10 flex flex-col items-center p-2 text-center rounded-lg backdrop-blur-md md:w-60 h-54 relative">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="mb-2 w-full h-32 object-cover rounded-t-md"
+            />
+            <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+            <button onClick={() => { handleCart(item) }} className="bg-blue-500 text-white px-4 py-2 rounded">Add to Cart</button>
+          </div>
+          <div className="flex flex-row items-center absolute top-0 left-0 -translate-x-1/4  bg-amber-500 text-white px-2 py-2 rounded-full -rotate-45">
+            
+            <span className="text-sm font-bold">₹ {item.price}</span>
+            <div className="h-2 w-2 rounded-full bg-white ml-2"></div>
           </div>
         </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
+
 
       {/* Pagination links */}
       <div className="flex justify-center mt-4">
