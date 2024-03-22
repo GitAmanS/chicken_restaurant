@@ -68,6 +68,9 @@ const paymentVarification = async(req,res) => {
             razorpay_order_id,
             razorpay_signature
         } = req.body.response;
+
+        const address = req.body.address;
+        console.log("address",address)
         console.log("id", razorpay_order_id);
         const sign = razorpay_order_id + "|" + razorpay_payment_id;
         const resultSign = crypto
@@ -99,6 +102,7 @@ const paymentVarification = async(req,res) => {
                     name: item.item.title // Include the item name
                 })),
                 totalPrice: totalPrice,
+                address:address,
                 // Add other fields as needed
             });
 
@@ -134,5 +138,28 @@ const getAllOrders = async (req, res) => {
     }
 };
 
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, newStatus } = req.body;
 
-module.exports = { createOrder, paymentVarification, getAllOrders };
+        // Find the order by ID
+        const order = await Order.findById(orderId);
+
+        // Check if the order exists
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        // Update the order status
+        order.status = newStatus;
+
+        // Save the updated order
+        await order.save();
+
+        // Send a success response
+        res.json({ message: 'Order status updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+module.exports = { createOrder, paymentVarification, getAllOrders, updateOrderStatus };

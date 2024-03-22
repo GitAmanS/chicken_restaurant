@@ -1,5 +1,5 @@
 const Item = require('../models/itemModel');
-
+const AWS = require('aws-sdk');
 // Controller methods
 const itemController = {
   // Create a new item
@@ -70,6 +70,26 @@ const itemController = {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+
+  uploadImage: async (req, res) => {
+    const file = req.file;
+    const uploadParams = {
+      Bucket: 'your-bucket-name',
+      Key: file.originalname,
+      Body: file.buffer,
+    };
+  
+    s3.upload(uploadParams, (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Failed to upload image' });
+      }
+      console.log('Image uploaded successfully:', data.Location);
+      res.json({ imageUrl: data.Location });
+    });
+  }
 };
+
+
 
 module.exports = itemController;

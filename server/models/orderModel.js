@@ -4,6 +4,7 @@ const orderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   items: [
     {
+      name: { type: String, required: true },
       item: { type: mongoose.Schema.Types.ObjectId, ref: 'Item', required: true },
       quantity: { type: Number, required: true },
     },
@@ -11,6 +12,12 @@ const orderSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
   status: { type: String, default: 'Pending' }, // Example: 'Pending', 'Completed', 'Cancelled'
   // Add other fields as needed
+  address: { // Adding the address field
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    postalCode: { type: String, required: true },
+    country: { type: String, required: true },
+  },
 
   // Timestamps
   createdAt: { type: Date, default: Date.now },

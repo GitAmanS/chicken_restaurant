@@ -8,6 +8,6 @@ const authenticateUser = require('../middleware/authenticateUser');
 router.get('/checkout', authenticateUser, orderController.createOrder);
 router.post('/paymentverification', authenticateUser, orderController.paymentVarification);
 router.get('/getAllOrders', authenticateUser, orderController.getAllOrders);
-
+router.post('/updateOrderStatus', authenticateUser, orderController.updateOrderStatus)
 
 module.exports = router;

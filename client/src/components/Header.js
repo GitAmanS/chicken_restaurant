@@ -15,6 +15,40 @@ const Header = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isCartOpen, setCartOpen] = useState(false);
   const { userData, logoutUser, addToCart, removeFromCart, cart, cartTotal } = useUser();
+  const [address, setAddress] = useState({
+    street: '',
+    city: '',
+    postalCode: '',
+    country: ''
+  });
+  const [isAddressModalOpen, setAddressModalOpen] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAddress({ ...address, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission (e.g., send data to backend)
+    console.log('Submitted:', address);
+    // Clear form fields after submission
+    setAddress({
+      street: '',
+      city: '',
+      postalCode: '',
+      country: ''
+    });
+    closeAddressModal();
+    handleCheckout();
+  };
+
+  const openAddressModal = () => {
+    setAddressModalOpen(true);
+  };
+
+  const closeAddressModal = () => {
+    setAddressModalOpen(false);
+  };
 
   
 
@@ -45,7 +79,7 @@ const Header = () => {
 			handler: async (response) => {
 				try {
           console.log("response", response)
-					const  data  = await axios.post("http://localhost:5000/api/paymentverification", {response}, {
+					const  data  = await axios.post("http://localhost:5000/api/paymentverification", {response, address}, {
             withCredentials: true,
           });
 					console.log(data);
@@ -210,7 +244,7 @@ const Header = () => {
               </h1>
               <button
                 className=" bg-green-500 text-white px-6 py-2 rounded-md "
-                onClick={handleCheckout}
+                onClick={openAddressModal}
               >
                 Proceed to Checkout
               </button>
@@ -225,6 +259,33 @@ const Header = () => {
 
         </div>}
       </div>
+
+      {isAddressModalOpen && (
+        <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50 z-50'>
+          <div className='bg-white p-8 rounded-lg'>
+            <h2 className='text-xl font-bold mb-4'>Enter Your Address</h2>
+            <form onSubmit={handleSubmit}>
+              <label className='block mb-2'>
+                Street:
+                <input type="text" name="street" value={address.street} onChange={handleChange} className='border border-gray-300 rounded-md px-2 py-1 w-full mt-1' />
+              </label>
+              <label className='block mb-2'>
+                City:
+                <input type="text" name="city" value={address.city} onChange={handleChange} className='border border-gray-300 rounded-md px-2 py-1 w-full mt-1' />
+              </label>
+              <label className='block mb-2'>
+                Postal Code:
+                <input type="text" name="postalCode" value={address.postalCode} onChange={handleChange} className='border border-gray-300 rounded-md px-2 py-1 w-full mt-1' />
+              </label>
+              <label className='block mb-2'>
+                Country:
+                <input type="text" name="country" value={address.country} onChange={handleChange} className='border border-gray-300 rounded-md px-2 py-1 w-full mt-1' />
+              </label>
+              <button type="submit" className='bg-blue-500 text-white rounded-md px-4 py-2 mt-4 hover:bg-blue-600'>Checkout</button>
+            </form>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
